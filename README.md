@@ -37,7 +37,7 @@ by using assembly version as version
 
 ## code snippet for version
 
-```
+```c#
 @using System.Diagnostics
 @using System.Reflection
 @{
@@ -47,9 +47,12 @@ by using assembly version as version
 
 usage ↓
 
+```html
 <link href="~/Content/Site.css?v=@version" rel="stylesheet" />
-
 <script src="~/Scripts/App.js?v=@version"></script>
+```
+
+
 
 
 
