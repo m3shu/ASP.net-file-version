@@ -1,0 +1,71 @@
+﻿@using System.Diagnostics
+@using System.Reflection
+@using ASP.net_file_version.Services
+@{
+
+    var version = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(typeof(MvcApplication)).Location).FileVersion;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+</head>
+<body>
+    <h2>@version</h2>
+
+    <pre id="test"></pre>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+
+    <h3>CSS example</h3>
+
+    @ShowAsText("<link href='~/Content/Site.css' rel='stylesheet' />")
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <br />
+
+    @ShowAsText("<link href='~/Content/Site.css?v=" + version + "' rel='stylesheet' />")
+    <link href="~/Content/Site.css?v=@version" rel="stylesheet" />
+    <br />
+
+    @ShowAsText(Html.IncludeVersionedJs("/Content/Site.css").ToString())
+    @Html.IncludeVersionedJs("/Content/Site.css")
+    <br />
+
+    @Scripts.Render("~/bundles/css?v=" + version)
+    @ShowAsText(Styles.Render("~/bundles/css?v=" + version).ToString())
+    <br />
+
+    @Scripts.Render("~/bundles/css")
+    @ShowAsText(Styles.Render("~/bundles/css").ToString())
+    <br />
+
+
+    <h3>JS example</h3>
+
+
+    @ShowAsText("<script src='~/Scripts/App.js'></script>")
+    <script src="~/Scripts/App.js"></script>
+    <br />
+
+    @ShowAsText("<script src='~/Scripts/App.js?v=" + @version + "'></script>")
+    <script src="~/Scripts/App.js?v=@version"></script>
+    <br />
+
+    @ShowAsText(Html.IncludeVersionedJs("/Scripts/App.js").ToString())
+    @Html.IncludeVersionedJs("/Scripts/App.js")
+    <br />
+
+    @ShowAsText(Scripts.Render("~/bundles/js?v=" + version).ToString())
+    @Scripts.Render("~/bundles/js?v=" + version)
+    <br />
+
+    @ShowAsText(Scripts.Render("~/bundles/js").ToString())
+    @Scripts.Render("~/bundles/js")
+    <br />
+
+    @helper ShowAsText(string html)
+    {
+        @Html.Raw(Html.Encode(html.Replace('\'', '"')))
+    }
+</body>
+</html>
