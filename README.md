@@ -103,5 +103,24 @@ https://docs.microsoft.com/en-us/aspnet/mvc/overview/performance/bundling-and-mi
 
 
 
+# For .net Core
+
+in *.cshtml ->
+
+```c#
+@using System.Reflection
+@{
+  var fileVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+}
+```
+
+
+
+in *.csproj   (open by notepad)
+
+```c#
+<FileVersion>1.0.$([System.DateTime]::UtcNow.Date.Subtract($([System.DateTime]::Parse("2000-01-01"))).TotalDays).$([System.Math]::Floor($([MSBuild]::Divide($([System.DateTime]::UtcNow.TimeOfDay.TotalSeconds), 1.32))))</FileVersion>   
+```
+
 
 
