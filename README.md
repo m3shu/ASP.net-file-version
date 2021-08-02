@@ -41,7 +41,11 @@ by using assembly version as version
 @using System.Diagnostics
 @using System.Reflection
 @{
-    string version = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(typeof(MvcApplication)).Location).FileVersion;
+#if DEBUG
+var version = DateTime.Now.Ticks;
+#else
+  string version = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(typeof(MvcApplication)).Location).FileVersion;
+#endif
 }
 ```
 
@@ -62,32 +66,12 @@ http://thinkofdev.com/auto-increase-project-version-number-in-visual-studio/
 
 ## for auto increment revision number 
 
-we need to change AssemblyInfo.cs like below
+we need to change AssemblyInfo.cs in notepad
 
-[assembly: AssemblyVersion("1.2.*")]  
+[assembly: AssemblyVersion("1.0.0.0")] => [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyFileVersion("1.0.0.0")] => //[assembly: AssemblyFileVersion("1.0.0.0")]
 
-//↑ here compiler take care (automatically increase number) of build and revision 
-
-//and we can change major minor as we want 
-
-
-
-//or
-[assembly: AssemblyVersion("1.2.3.*")]  
-
-//↑ here compiler take care (automatically increase number) of revision 
-
-//and we can change major minor build as we want
-
-
-
-//and finally we need to comment this line otherwise auto increment may not work
-
-// [assembly: AssemblyFileVersion("6.7.8.9")]
-
-
-
-NB: That line exist in AssemblyFileVersion in Properties/AssemblyInfo.cs 
+-------
 
 
 
@@ -110,13 +94,17 @@ in *.cshtml ->
 ```c#
 @using System.Reflection
 @{
-  var fileVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+#if DEBUG
+  var fileVersion = DateTime.Now.Ticks;
+#else
+var fileVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
+#endif
 }
 ```
 
 
 
-in *.csproj   (open by notepad)
+edit *.csproj   (open in notepad)
 
 ```c#
 <FileVersion>1.0.$([System.DateTime]::UtcNow.Date.Subtract($([System.DateTime]::Parse("2000-01-01"))).TotalDays).$([System.Math]::Floor($([MSBuild]::Divide($([System.DateTime]::UtcNow.TimeOfDay.TotalSeconds), 1.32))))</FileVersion>   
