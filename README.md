@@ -92,13 +92,11 @@ https://docs.microsoft.com/en-us/aspnet/mvc/overview/performance/bundling-and-mi
 in *.cshtml ->
 
 ```c#
+@using System.Diagnostics
 @using System.Reflection
+@using ASP.net_file_version.Services
 @{
-#if DEBUG
-  var fileVersion = DateTime.Now.Ticks;
-#else
-var fileVersion = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version;
-#endif
+    var version = FileVersionInfo.GetVersionInfo(Assembly.GetAssembly(typeof(MvcApplication)).Location).FileVersion;
 }
 ```
 
